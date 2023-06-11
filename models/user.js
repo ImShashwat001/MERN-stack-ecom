@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 const crypto = require('crypto');
+import { v1 as uuidv1 } from 'uuid';
 
 
 // const userSchema = new Schema({
@@ -47,7 +48,22 @@ const userSchema = new Schema({
    }
 });
 
+userSchema.virtual("password")
+  .set(function(password) {
+      this._password = password // _password is a private variable I created
+      this.salt = uuidv1();
+      this.encry_password = this.securePassword(password);
+  })
+  .get(function() {
+    return this.password
+  })
+
 userSchema.method = {
+
+  authenticate: function(plainpassword) {
+    return this.securePassword(plainpassword) === this.encry_password
+  },
+
   securePassword: function(plainpassword) {
     if (!password) return "";
     try {

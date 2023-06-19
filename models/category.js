@@ -8,4 +8,4 @@ const categorySchema = new mongoose.Schema({
         maxlength: 32,
         unique: true
     }
-})
+}, { timestamps: true })

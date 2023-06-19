@@ -46,7 +46,7 @@ const userSchema = new Schema({
     type: Array,
     default: []
    }
-});
+}, { timestamps: true });
 
 userSchema.virtual("password")
   .set(function(password) {

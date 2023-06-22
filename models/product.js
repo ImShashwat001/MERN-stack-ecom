@@ -2,6 +2,11 @@ const mongoose = require("mongoose")
 
 const productSchema = new mongoose.Schema({
     name: {
-        type
+        type: String,
+        trim: true,
+        required: true,
+        maxlength: 32,
+        unique: true
     }
-})
+}, { timestamps: true }
+);

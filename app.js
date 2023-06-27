@@ -13,7 +13,7 @@ mongoose.connect(process.env.DATABASE, {
 }).then(() => {
     console.log("DB CONNECTED");
 }).catch(
-    console.log("DB could not connected")
+    console.log("DB not connected")
 );
 
 

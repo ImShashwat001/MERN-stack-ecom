@@ -2,8 +2,15 @@ require('dotenv').config()
 const mongoose = require('mongoose');
 const express = require("express");
 const app = express();
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const cors = require("cors");
+
 
 // what is it... myfun().then(runs after my fun success).catch(shows error if myfun does not run properly)
+
+
+// DB connection
 
 mongoose.connect(process.env.DATABASE, {
     // helps keep db connection alive
@@ -15,6 +22,11 @@ mongoose.connect(process.env.DATABASE, {
 }).catch(
     console.log("DB not connected")
 );
+
+
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(cors());
 
 
 const port = process.env.PORT || 8000;

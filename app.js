@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require("cors");
 
+const authRoutes = require("./routes/auth");
+
 
 // what is it... myfun().then(runs after my fun success).catch(shows error if myfun does not run properly)
 
@@ -23,14 +25,19 @@ mongoose.connect(process.env.DATABASE, {
     console.log("DB not connected")
 );
 
-
+//Middlewares
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
 
+//My routes
+app.use("/api/", authRoutes)
 
+
+// PORT
 const port = process.env.PORT || 8000;
 
+//Starting a server
 app.listen(port, () => {
     console.log(`app is running at ${port}`);
 } )

@@ -31,7 +31,7 @@ app.use(cookieParser());
 app.use(cors());
 
 //My routes
-app.use("/api/", authRoutes)
+app.use("/api/", authRoutes);
 
 
 // PORT

@@ -16,16 +16,6 @@ exports.signup = async (req, res) => {
     };
 }
 
-//     user.insertOne((err, user) => {
-//         if(err) {
-//             return res.status(400).json({
-//                 err: "Not able to save user in DB"
-//             })
-//         }
-//         res.json(user);
-//     });
-// };
-
 
 exports.signout = (req, res) => {
     res.json({

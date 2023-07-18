@@ -8,7 +8,11 @@ exports.signup = async (req, res) => {
     const savedUser = await user.save();
 
     if (savedUser) {
-        res.json(savedUser);
+        res.json({
+            name: user.name,
+            email: user.email,
+            id: user._id
+        });
     } else {
         res.status(400).json({
             err: "Not able to save user data in DB"

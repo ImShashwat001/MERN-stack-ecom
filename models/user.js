@@ -44,7 +44,7 @@ const userSchema = new Schema({
    }
 }, { timestamps: true });
 
-userSchema.virtual("password")
+userSchema.virtual("password") // taken "password as an argument"
   .set(function(password) {
       this._password = password // _password is a private variable I created
       this.salt = uuidv1();

@@ -1,7 +1,17 @@
+const {check, validationResult } = require("express-validator");
 const User = require("../models/user")
 
 
 exports.signup = async (req, res) => {
+
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()) {
+        return res.status(422).json({
+            error:  errors.array()[0].msg
+        })
+    }
+
     //created object user
     const user = new User(req.body);
 

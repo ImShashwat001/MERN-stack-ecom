@@ -32,7 +32,8 @@ exports.signup = async (req, res) => {
     };
 }
 
-exports.signin = (req, res) => {
+exports.signin = async (req, res) => {
+    const errors = validationResult(req);
 
     // destructuring req.body to get email and password
     const {email, password } = req.body;
@@ -42,8 +43,9 @@ exports.signin = (req, res) => {
             error:  errors.array()[0].msg
         })
     }
+// searching in db to authenticate login
 
-    User.findOne({ email }, (err, user) => {
+    await User.findByIdAsync({ email }, (err, user) => {
         if(err) {
             res.statys(400).json({
                 error: "USER email does not exist"
@@ -59,7 +61,7 @@ exports.signin = (req, res) => {
         const token = jwt.signin({_id: user._id}, process.env.SECRET)
 
         //put token in cookie
-        res.cookie("token, token, {expire: new Date() + 120 }");
+        res.cookie("token, token, {expire: new Date() + 1200 }");
 
         //send response to front end
         const {_id, name, email, role} = user;

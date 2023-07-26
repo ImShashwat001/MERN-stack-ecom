@@ -32,43 +32,120 @@ exports.signup = async (req, res) => {
     };
 }
 
-exports.signin = async (req, res) => {
+// exports.signin = async (req, res) => {
+//     const errors = validationResult(req);
+
+//     // destructuring req.body to get email and password
+//     const {email, password } = await req.body;
+
+
+
+//     try{
+//         if(!errors.isEmpty()) {
+//             return res.status(422).json({
+//                 error:  errors.array()[0].msg
+//             })
+//         }
+//     } catch(error) {
+//         console.log(error);
+//     }
+
+    
+// // searching in db to authenticate login
+
+//     User.findById({ email }, (err, user) => {
+    
+
+
+
+        
+
+
+
+//         if(err) {
+//             res.statys(400).json({
+//                 error: "USER email does not exist"
+//             })
+//         }
+//         if(!user.authenticate(password)){
+//             return res.status(401).json({
+//                 error: "Email and password do not match"
+//             })
+//         }
+//         //token
+
+//         const token = jwt.signin({_id: user._id}, process.env.SECRET)
+
+//         //put token in cookie
+//         res.cookie("token, token, {expire: new Date() + 1200 }");
+
+//         //send response to front end
+//         const {_id, name, email, role} = user;
+//         return res.json({token, user: {_id, name, email, role}})
+
+//     })
+// }
+
+
+
+exports.signin = (req, res) => {
     const errors = validationResult(req);
-
-    // destructuring req.body to get email and password
-    const {email, password } = req.body;
-
-    if(!errors.isEmpty()) {
-        return res.status(422).json({
-            error:  errors.array()[0].msg
-        })
+    const { email, password } = req.body;
+  
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        error: errors.array()[0].msg
+      });
     }
-// searching in db to authenticate login
+  
+    // User.findOne({ email }, (err, user) => {
+    //   if (err || !user) {
+    //     return res.status(400).json({
+    //       error: "USER email does not exists"
+    //     });
+    //   }
+  
+    //   if (!user.autheticate(password)) {
+    //     return res.status(401).json({
+    //       error: "Email and password do not match"
+    //     });
+    //   }
 
-    await User.findByIdAsync({ email }, (err, user) => {
-        if(err) {
-            res.statys(400).json({
-                error: "USER email does not exist"
-            })
-        }
-        if(!user.authenticate(password)){
-            return res.status(401).json({
-                error: "Email and password do not match"
-            })
-        }
-        //token
+    User.findOne({ email })
+    .then(user => {
+      if (!user) {
+        return res.status(400).json({
+          error: "USER email does not exist"
+        });
+      }
 
-        const token = jwt.signin({_id: user._id}, process.env.SECRET)
+      if (!user.authenticate(password)) {
+        return res.status(401).json({
+          error: "Email and password do not match"
+        });
+      }
 
-        //put token in cookie
-        res.cookie("token, token, {expire: new Date() + 1200 }");
 
-        //send response to front end
-        const {_id, name, email, role} = user;
-        return res.json({token, user: {_id, name, email, role}})
 
+
+
+
+      //create token
+      const token = jwt.sign({ _id: user._id }, process.env.SECRET);
+      //put token in cookie
+      res.cookie("token", token, { expire: new Date() + 9999 });
+  
+      //send response to front end
+      const { _id, name, email, role } = user;
+      return res.json({ token, user: { _id, name, email, role } });
     })
-}
+    .catch(err => {
+        return res.status(500).json({
+            error: "An error occured while processing the request"
+        })
+    })
+  };
+  
 
 exports.signout = (req, res) => {
     res.json({

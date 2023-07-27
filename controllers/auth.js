@@ -98,24 +98,11 @@ exports.signin = (req, res) => {
       });
     }
   
-    // User.findOne({ email }, (err, user) => {
-    //   if (err || !user) {
-    //     return res.status(400).json({
-    //       error: "USER email does not exists"
-    //     });
-    //   }
-  
-    //   if (!user.autheticate(password)) {
-    //     return res.status(401).json({
-    //       error: "Email and password do not match"
-    //     });
-    //   }
-
     User.findOne({ email })
-    .then(user => {
-      if (!user) {
+    .then((user, err) => {
+      if (err || !user) {
         return res.status(400).json({
-          error: "USER email does not exist"
+          error: "USER does not exist"
         });
       }
 
@@ -124,11 +111,6 @@ exports.signin = (req, res) => {
           error: "Email and password do not match"
         });
       }
-
-
-
-
-
 
       //create token
       const token = jwt.sign({ _id: user._id }, process.env.SECRET);
@@ -139,7 +121,7 @@ exports.signin = (req, res) => {
       const { _id, name, email, role } = user;
       return res.json({ token, user: { _id, name, email, role } });
     })
-    .catch(err => {
+    .catch((error) => {
         return res.status(500).json({
             error: "An error occured while processing the request"
         })

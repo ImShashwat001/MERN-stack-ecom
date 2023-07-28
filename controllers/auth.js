@@ -127,6 +127,15 @@ exports.signin = (req, res) => {
         })
     })
   };
+
+  exports.signout = (req, res) => {
+    
+    // clearing cookie
+    res.clearCookie("token");
+    res.json({
+        message: "Üser signed out successfully"
+    })
+  }
   
 
 exports.signout = (req, res) => {
@@ -134,3 +143,12 @@ exports.signout = (req, res) => {
         message: "User signout"
     });
 }
+
+
+//protected routes
+expressJwt.isSignedIn = expressJwt({
+    secret: process.env.SECRET,
+    userProperty: "auth"
+})
+
+//custom middlewares

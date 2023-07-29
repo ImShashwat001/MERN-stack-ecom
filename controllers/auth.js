@@ -2,7 +2,10 @@ const {check, validationResult } = require("express-validator");
 const User = require("../models/user");
 const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
-
+// import {check, validationResult } from "express-validator";
+// import User from "../models/user";
+// import jwt from "jsonwebtoken";
+// import expressJwt from "express-jwt";
 
 exports.signup = async (req, res) => {
 
@@ -136,14 +139,6 @@ exports.signin = (req, res) => {
         message: "Üser signed out successfully"
     })
   }
-  
-
-exports.signout = (req, res) => {
-    res.json({
-        message: "User signout"
-    });
-}
-
 
 //protected routes
 exports.isSignedIn = expressJwt({

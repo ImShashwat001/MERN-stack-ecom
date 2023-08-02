@@ -4,6 +4,7 @@ const express = require('express')
 const router = express.Router();
 const { signout, signup, signin, isSignedIn } = require("../controllers/auth");
 const { check } = require('express-validator');
+const { expressjwt: jwt } = require("express-jwt");
 
 
 
@@ -26,8 +27,13 @@ router.post("/signin",[
 
 router.get("/signout", signout);
 
-router.get("/testroute", isSignedIn, (req, res) => {
-    res.send("A protected route");
-});
+// router.get("/testroute", isSignedIn, (req, res) => {
+//     res.send("A protected route");
+// });
+
+
+router.get('/testroute', isSignedIn, (req, res) => {
+    res.send("A protected route")
+})
 
 module.exports = router;

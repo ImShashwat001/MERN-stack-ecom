@@ -116,9 +116,9 @@ exports.signin = (req, res) => {
       }
 
       //create token
-      const token = jwt.sign({ _id: user._id }, process.env.SECRET);
+      const token = jwt.sign({ _id: user._id }, process.env.SECRET, {expiresIn: '1h'});
       //put token in cookie
-      res.cookie("token", token, { expire: new Date() + 9999 });
+      res.cookie("token", token,);
   
       //send response to front end
       const { _id, name, email, role } = user;
@@ -144,7 +144,7 @@ exports.signin = (req, res) => {
 
 exports.isSignedIn = expressJwt({
     secret: process.env.SECRET,
-    userProperty: "auth"
+    userProperty: "auth",
 })
 
 //custom middlewares

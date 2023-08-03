@@ -1,7 +1,7 @@
 const {check, validationResult } = require("express-validator");
 const User = require("../models/user");
-const jwt = require('jsonwebtoken');
-const expressJwt = require('express-jwt');
+const Jwt = require('jsonwebtoken');
+const { expressjwt: jwt } = require("express-jwt");
 // import {check, validationResult } from "express-validator";
 // import User from "../models/user";
 // import jwt from "jsonwebtoken";
@@ -91,7 +91,7 @@ exports.signup = async (req, res) => {
 
 
 
-exports.signin = (req, res) => {
+exports.signin = async (req, res) => {
     const errors = validationResult(req);
     const { email, password } = req.body;
   
@@ -101,7 +101,7 @@ exports.signin = (req, res) => {
       });
     }
   
-    User.findOne({ email })
+    await User.findOne({ email })
     .then((user, err) => {
       if (err || !user) {
         return res.status(400).json({
@@ -114,9 +114,21 @@ exports.signin = (req, res) => {
           error: "Email and password do not match"
         });
       }
+      const payload = {
+        id: user._id,
+        email: user.email
+      }
 
       //create token
-      const token = jwt.sign({ _id: user._id }, process.env.SECRET, {expiresIn: '1h'});
+      const token = Jwt.sign(payload, process.env.SECRET, {expiresIn: 36000 });
+
+      //if token is incorrect
+      if(!token) {
+        return res.status(500).json({
+          error: "error signing token"
+        });
+      }
+
       //put token in cookie
       res.cookie("token", token,);
   
@@ -140,11 +152,12 @@ exports.signin = (req, res) => {
     })
   }
 
-//protected routes
+// protected routes
 
-exports.isSignedIn = expressJwt({
+exports.isSignedIn = jwt({
+   algorithms: ["HS256"],
     secret: process.env.SECRET,
-    userProperty: "auth",
+    userProperty: "auth",  
 })
 
 //custom middlewares

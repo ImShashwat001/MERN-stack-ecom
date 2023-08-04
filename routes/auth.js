@@ -29,8 +29,7 @@ router.get("/signout", signout);
 
 
 router.get('/testroute',isSignedIn , (req, res) => {
-    res.json(req.auth);
-    
+    res.json(req.auth); 
 })
 
 module.exports = router;

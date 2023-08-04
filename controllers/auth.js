@@ -172,6 +172,7 @@ exports.isAuthenticated = (req, res, next) => {
     });
   } 
   
+  // next transfer control from one middleware to anther middleware
   next();
 };
 

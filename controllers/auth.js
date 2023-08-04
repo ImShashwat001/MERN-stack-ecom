@@ -153,7 +153,8 @@ exports.signin = async (req, res) => {
   }
 
 // protected routes
-
+// we will not use nxt here because expressJWT already covered up next
+// imported expressJwt in "jwt"
 exports.isSignedIn = jwt({
    algorithms: ["HS256"],
     secret: process.env.SECRET,
@@ -161,3 +162,25 @@ exports.isSignedIn = jwt({
 })
 
 //custom middlewares
+
+exports.isAuthenticated = (req, res, next) => {
+  let checker = req.profile && req.auth && req.profile._id === req.auth._id;
+  
+  if(!checker) {
+    return res.status(403).json({
+      error: "ACCESS DENIED"
+    });
+  } 
+  
+  next();
+};
+
+
+exports.isAdmin = (req, res, next) =>{
+  if(req.profile.role === 0) {
+    return res.status(403).json({
+      error: "Not admin, Access denied."
+    });
+  }
+  next();
+}

@@ -6,7 +6,9 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require("cors");
 
+//My routes
 const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
 
 
 // what is it... myfun().then(runs after my fun success).catch(shows error if myfun does not run properly)
@@ -32,6 +34,7 @@ app.use(cors());
 
 //My routes
 app.use("/api/", authRoutes);
+app.use("/api/", userRoutes);
 
 
 // PORT

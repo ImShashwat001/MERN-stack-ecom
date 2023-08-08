@@ -163,18 +163,44 @@ exports.isSignedIn = jwt({
 
 //custom middlewares
 
-exports.isAuthenticated = (req, res, next) => {
-  let checker = req.profile && req.auth && req.profile._id == req.auth._id;
+// exports.isAuthenticated = (req, res, next) => {
+//   let checker = req.profile && req.auth && req.profile._id === req.auth._id;
   
-  if(!checker) {
-    return res.status(403).json({
-      error: "ACCESS DENIED"
+//   if(!checker) {
+//     return res.status(403).json({
+//       error: "ACCESS DENIED"
+//     });
+//   } 
+  
+//   // next transfer control from one middleware to anther middleware
+//   next();
+// };
+
+exports.isAuthenticated = async (req, res, next) => {
+
+  try{
+    let checker = await req.profile && req.auth && req.profile._id == req.auth._id;
+
+    if (!checker) {
+      return res.status(403).json({
+        error: "ACCESS DENIED"
+      });
+    }
+    next();
+  } catch (err) {
+    return res.status(500).json({
+      error: "Internal server error"
     });
-  } 
-  
-  // next transfer control from one middleware to anther middleware
-  next();
-};
+  }
+}
+
+
+
+
+
+
+
+
 
 
 exports.isAdmin = (req, res, next) =>{

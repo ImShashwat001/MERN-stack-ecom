@@ -3,7 +3,9 @@ const User = require("../models/user");
 
 exports.getUserById = async (req, res, next, id) => {
     try {
-      const user = await User.findById(id);
+      
+      const user = await User.findById({_id:id});
+      
       if (!user) {
         return res.status(404).json({
           error: "User not found in the database"
@@ -13,7 +15,7 @@ exports.getUserById = async (req, res, next, id) => {
       next();
     } catch (err) {
       return res.status(500).json({
-        error: "Internal server error"
+        error: "Something happened"
       });
     }
   };
